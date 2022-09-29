@@ -1,15 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import cartItems from '../../cartItems';
 
 const initialState = {
     // cartItems: cartItems,
-    cartItems: cartItems,
+    cartItems: [],
     amount: 0,
     total: 0,
     isLoading: true,
 };
 
 // The create slice is a function that accepts an inital state, an object of reducer functions, a "slice name", and automatically generates action creators and action types that corresponds to the reducers and state
+
+const url = 'https://course-api.com/react-useReducer-cart-project';
+
+
+export const getCartItems = createAsyncThunk('cart/getCartItems', () => {
+    return fetch(url)
+      .then((resp) => resp.json())
+      .catch((err) => console.log(err));
+  });
+
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -42,6 +52,19 @@ const cartSlice = createSlice({
             state.amount = amount;
             state.total = total;
         }
+    },
+    // Using create thunk use three lifecycle - Pending, Fulfilled or Rejected
+    extraReducers: {
+        [getCartItems.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [getCartItems.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.cartItems = action.payload;
+        },
+        [getCartItems.rejected]: (state) => {
+            state.isLoading = false;
+        },
     },
 });
 

@@ -621,6 +621,7 @@ export const getCartItems = createAsyncThunk('cart/getCartItems', () => {
     .catch((err) => console.log(error));
 });
 
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -641,7 +642,6 @@ const cartSlice = createSlice({
 ```
 
 - App.js
-
 ```js
 import { calculateTotals, getCartItems } from './features/cart/cartSlice';
 
